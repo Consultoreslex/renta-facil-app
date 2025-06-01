@@ -11,4 +11,3 @@ export const sendToGoogleSheet = async (data: any) => {
     console.error('Error enviando a Google Sheets:', error)
   }
 }
- 

@@ -18,6 +18,8 @@ const Formulario = () => {
     observaciones: '',
   })
 
+  const [mensaje, setMensaje] = useState('')
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -25,35 +27,54 @@ const Formulario = () => {
     })
   }
 
+  const validarCampos = () => {
+    return (
+      formData.arrendatario_rut &&
+      formData.arrendatario_nombre &&
+      formData.arrendador_rut &&
+      formData.arrendador_nombre &&
+      formData.propiedad_rol &&
+      formData.direccion
+    )
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // 1. Guardar en Supabase
-    await supabase.from('contratos').insert([formData])
+    if (!validarCampos()) {
+      setMensaje('⚠️ Por favor completa los campos obligatorios.')
+      return
+    }
 
-    // 2. Enviar a Google Sheets
-    await sendToGoogleSheet(formData)
-
-    alert('Ficha guardada y enviada correctamente.')
+    try {
+      await supabase.from('contratos').insert([formData])
+      await sendToGoogleSheet(formData)
+      setMensaje('✅ Ficha guardada y enviada correctamente.')
+    } catch (error) {
+      console.error(error)
+      setMensaje('❌ Error al guardar los datos.')
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <input name="arrendatario_rut" placeholder="RUT Arrendatario" onChange={handleChange} className="input" />
-      <input name="arrendatario_nombre" placeholder="Nombre Arrendatario" onChange={handleChange} className="input" />
-      <input name="arrendador_rut" placeholder="RUT Arrendador" onChange={handleChange} className="input" />
-      <input name="arrendador_nombre" placeholder="Nombre Arrendador" onChange={handleChange} className="input" />
-      <input name="propiedad_rol" placeholder="ROL Propiedad" onChange={handleChange} className="input" />
-      <input name="direccion" placeholder="Dirección" onChange={handleChange} className="input" />
+    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded shadow-md">
+      {mensaje && <div className="p-2 bg-yellow-200 rounded">{mensaje}</div>}
+
+      <input name="arrendatario_rut" placeholder="RUT Arrendatario" onChange={handleChange} className="input" required />
+      <input name="arrendatario_nombre" placeholder="Nombre Arrendatario" onChange={handleChange} className="input" required />
+      <input name="arrendador_rut" placeholder="RUT Arrendador" onChange={handleChange} className="input" required />
+      <input name="arrendador_nombre" placeholder="Nombre Arrendador" onChange={handleChange} className="input" required />
+      <input name="propiedad_rol" placeholder="ROL Propiedad" onChange={handleChange} className="input" required />
+      <input name="direccion" placeholder="Dirección" onChange={handleChange} className="input" required />
       <input name="monto_arriendo" placeholder="Monto Arriendo" onChange={handleChange} className="input" />
       <input name="fecha_inicio" type="date" onChange={handleChange} className="input" />
       <input name="duracion_meses" placeholder="Duración en meses" onChange={handleChange} className="input" />
       <input name="observaciones" placeholder="Observaciones" onChange={handleChange} className="input" />
 
-      <div className="flex gap-2">
-        <button type="submit" className="btn">Guardar y Enviar</button>
-        <button type="button" className="btn" onClick={() => generatePdf(formData)}>Exportar PDF</button>
-        <button type="button" className="btn" onClick={() => generateExcel(formData)}>Exportar Excel</button>
+      <div className="flex flex-wrap gap-2">
+        <button type="submit" className="btn bg-green-600 hover:bg-green-700">Guardar y Enviar</button>
+        <button type="button" className="btn bg-purple-600 hover:bg-purple-700" onClick={() => generatePdf(formData)}>Exportar PDF</button>
+        <button type="button" className="btn bg-yellow-600 hover:bg-yellow-700" onClick={() => generateExcel(formData)}>Exportar Excel</button>
       </div>
     </form>
   )

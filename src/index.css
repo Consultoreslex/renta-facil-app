@@ -2,11 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Estilos personalizados */
 .input {
-  @apply w-full border border-gray-300 p-2 rounded;
+  @apply w-full border p-2 rounded;
 }
 
 .btn {
-  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition;
+  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700;
 }

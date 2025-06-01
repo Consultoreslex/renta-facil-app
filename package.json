@@ -4,25 +4,28 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "node node_modules/vite/bin/vite.js build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.39.4",
+    "@emailjs/browser": "^4.4.1",
+    "@supabase/supabase-js": "^2.49.8",
     "html2canvas": "^1.4.1",
-    "jspdf": "^2.5.1",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^5.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^7.6.1",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.7",
     "@types/react-dom": "^18.2.4",
-    "@vitejs/plugin-react": "^4.4.1",
-    "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.24",
-    "tailwindcss": "^3.3.2",
+    "@vitejs/plugin-react": "^4.5.0",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.4",
+    "tailwindcss": "^3.4.17",
     "typescript": "^5.3.3",
-    "vite": "^5.4.18"
+    "vite": "^5.0.8"
   }
 }
